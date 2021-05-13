@@ -1,6 +1,6 @@
 [package]
 name = "tls-tunnel"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Shane Curran <shane@curran.ie>"]
 description = "Rust TLS over TCP tunnel"
 edition = "2018"
