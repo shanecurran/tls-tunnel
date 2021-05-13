@@ -13,7 +13,7 @@
 [mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [mit-url]: https://github.com/shanecurran/tls-tunnel/blob/master/LICENSE
 
-This simple crate establishes a TLS connection to a specified target and creates a TCP server that allows you to tunnel TCP to the target over a standard TLS connection.
+This simple crate establishes a TLS connection to a specified target and creates a TCP server that allows you to communicate with the TLS server over a raw, unencrypted TCP socket.
 
 This is useful for environments where TLS connections are not feasible at runtime. Some examples:
 
