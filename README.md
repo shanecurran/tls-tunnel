@@ -2,6 +2,17 @@
 
 ### Rust TLS over TCP tunnel
 
+[![Crates.io][crates-badge]][crates-url]
+[![docs.rs][docs-badge]][docs-url]
+[![MIT licensed][mit-badge]][mit-url]
+
+[crates-badge]: https://img.shields.io/crates/v/tls-tunnel.svg
+[crates-url]: https://crates.io/crates/tls-tunnel
+[docs-badge]: https://docs.rs/tls-tunnel/badge.svg
+[docs-url]: https://docs.rs/tls-tunnel
+[mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
+[mit-url]: https://github.com/shanecurran/tls-tunnel/blob/master/LICENSE
+
 This simple crate establishes a TLS connection to a specified target and creates a TCP server that allows you to tunnel TCP to the target over a standard TLS connection.
 
 This is useful for environments where TLS connections are not feasible at runtime. Some examples:
