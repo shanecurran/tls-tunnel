@@ -3,7 +3,9 @@
 use tokio::io::AsyncWriteExt;
 use futures::FutureExt;
 
-
+/// The target URL to forward all traffic through.
+/// Can be overridden by passing in a URL as the only argument at runtime.
+/// Also supports additional protocols as well as explicit port setting.
 const DEFAULT_TARGET_ADDR: &'static str = "https://httpbin.org";
 
 /// Returns an active `tokio` TcpListener
