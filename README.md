@@ -34,7 +34,7 @@ $ cargo install tls-tunnel
 Pass the target host and port as an argument when running using `cargo` or the compiled binary. If not provided, the tunnel will default to `httpbin.org:443` for demo purposes.
 
 ```bash
-$ tls-tunnel httpbin.org:443
+$ tls-tunnel https://httpbin.org
 ```
 
 The server will automatically choose a port to listen on. It defaults to port `1025` and will increment by one until it finds an available port to bind to.
