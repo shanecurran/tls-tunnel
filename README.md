@@ -10,9 +10,9 @@ This is useful for environments where TLS connections are not feasible at runtim
 - Legacy runtimes which do not support HTTPS but do support HTTP.
 - Interoperability of legacy VoIP, IRC or FTP clients which do not support TLS with servers which do.
 
-### Example
-
 #### Install
+
+Simply download and compile the Rust binary using `cargo install`:
 
 ```bash
 $ cargo install tls-tunnel
@@ -20,7 +20,7 @@ $ cargo install tls-tunnel
 
 #### Run
 
-Simply pass the target host and port as an argument when running using `cargo` or the compiled binary. If not provided, the tunnel will default to `httpbin.org:443` for demo purposes.
+Pass the target host and port as an argument when running using `cargo` or the compiled binary. If not provided, the tunnel will default to `httpbin.org:443` for demo purposes.
 
 ```bash
 $ tls-tunnel httpbin.org:443
