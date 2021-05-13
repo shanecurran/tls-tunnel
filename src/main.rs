@@ -6,6 +6,10 @@ use futures::FutureExt;
 
 const DEFAULT_TARGET_ADDR: &'static str = "https://httpbin.org";
 
+/// Returns an active `tokio` TcpListener
+/// 
+/// Iterates through all ports from `1025` to `65535` until it finds an available port to bind to,
+/// other wise returns an `AddrInUse` error.
 async fn get_listener() -> Result<tokio::net::TcpListener, std::io::Error> {
     for port in 1025..65535 {
         match tokio::net::TcpListener::bind(
@@ -57,6 +61,9 @@ async fn main() -> Result<(), std::io::Error> {
     Ok(())
 }
 
+/// Takes a `tokio` TcpStream and forwards all bytes to a fresh `tokio_rustls` `TlsStream`.
+/// 
+/// Also performs TLS certificate validation using the default `webpki-roots` Root CA list.
 async fn transfer(mut inbound: tokio::net::TcpStream, config: tokio_rustls::rustls::ClientConfig, target_host: String, target_port: u16) -> Result<(), Box<dyn std::error::Error>> { 
     let config = tokio_rustls::TlsConnector::from(std::sync::Arc::new(config));
     let dnsname = webpki::DNSNameRef::try_from_ascii_str(&target_host)?;
