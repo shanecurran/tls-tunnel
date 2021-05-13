@@ -1,6 +1,6 @@
 # tls-tunnel
 
-## Rust TLS over TCP tunnel
+### Rust TLS over TCP tunnel
 
 This simple crate establishes a TLS connection to a specified target and creates a TCP server that allows you to tunnel TCP to the target over a standard TLS connection.
 
