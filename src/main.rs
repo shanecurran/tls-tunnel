@@ -3,7 +3,8 @@
 use tokio::io::AsyncWriteExt;
 use futures::FutureExt;
 
-const DEFAULT_TARGET_ADDR: &'static str = "httpbin.org:443";
+
+const DEFAULT_TARGET_ADDR: &'static str = "https://httpbin.org";
 
 async fn get_listener() -> Result<tokio::net::TcpListener, std::io::Error> {
     for port in 1025..65535 {
@@ -33,10 +34,14 @@ async fn get_listener() -> Result<tokio::net::TcpListener, std::io::Error> {
 
 #[tokio::main]
 async fn main() -> Result<(), std::io::Error> {
-    let target_host = match std::env::args().nth(1) {
+    let target_url = match std::env::args().nth(1) {
         Some(host) => host,
         None => DEFAULT_TARGET_ADDR.to_string()
     };
+
+    let parsed_url = url::Url::parse(&target_url).expect("Invalid target URL specified");
+    let target_host = parsed_url.host().expect("Invalid target URL specified");
+    let target_port = parsed_url.port_or_known_default().expect("Invalid or no target port specified");
 
     let mut config = tokio_rustls::rustls::ClientConfig::new();
     config.root_store.add_server_trust_anchors(&webpki_roots::TLS_SERVER_ROOTS);
@@ -44,7 +49,7 @@ async fn main() -> Result<(), std::io::Error> {
     let listener = get_listener().await?;
 
     while let Ok((inbound, _)) = listener.accept().await {
-        let transfer = transfer(inbound, config.clone(), target_host.clone()).map(|_| {});
+        let transfer = transfer(inbound, config.clone(), target_host.to_string(), target_port).map(|_| {});
 
         tokio::spawn(transfer);
     }
@@ -52,11 +57,10 @@ async fn main() -> Result<(), std::io::Error> {
     Ok(())
 }
 
-async fn transfer(mut inbound: tokio::net::TcpStream, config: tokio_rustls::rustls::ClientConfig, target_host: String) -> Result<(), Box<dyn std::error::Error>> {
-    let hostname = target_host.split(":").collect::<Vec<&str>>()[0];
+async fn transfer(mut inbound: tokio::net::TcpStream, config: tokio_rustls::rustls::ClientConfig, target_host: String, target_port: u16) -> Result<(), Box<dyn std::error::Error>> { 
     let config = tokio_rustls::TlsConnector::from(std::sync::Arc::new(config));
-    let dnsname = webpki::DNSNameRef::try_from_ascii_str(&hostname)?;
-    let stream = tokio::net::TcpStream::connect(&target_host).await?;
+    let dnsname = webpki::DNSNameRef::try_from_ascii_str(&target_host)?;
+    let stream = tokio::net::TcpStream::connect((target_host.to_string(), target_port)).await?;
     let outbound = config.connect(dnsname, stream).await?;
 
     let (mut ri, mut wi) = inbound.split();
